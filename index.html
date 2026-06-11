@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RecruitAgents — AI-agents voor je recruitmentproces</title>
+  <meta name="description" content="Prototype: AI-recruitment-agents voor screening, intakeverslagen en kandidaatcommunicatie, klaar voor ATS-integratie.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">◆</span>
+      <span class="brand-name">Recruit<em>Agents</em></span>
+      <span class="brand-tag">prototype</span>
+    </div>
+    <button id="btn-settings" class="btn-ghost" type="button">⚙ Instellingen</button>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="hero-kicker">AI-agents voor je recruitmentproces</p>
+      <h1>Van gesprek naar <span class="accent">ATS-klare</span> output.<br>In seconden.</h1>
+      <p class="hero-sub">Drie gespecialiseerde agents die het handwerk uit recruitment halen:
+      screening, intakeverslagen en kandidaatcommunicatie. Gebouwd als prototype
+      voor integratie met je eigen ATS.</p>
+    </section>
+
+    <nav class="agent-tabs" role="tablist">
+      <button class="tab active" data-agent="screening" role="tab">
+        <span class="tab-num">01</span>
+        <span class="tab-title">Screening Agent</span>
+        <span class="tab-desc">CV × vacature → matchanalyse</span>
+      </button>
+      <button class="tab" data-agent="interview" role="tab">
+        <span class="tab-num">02</span>
+        <span class="tab-title">Interview Agent</span>
+        <span class="tab-desc">Transcript → intakeverslag</span>
+      </button>
+      <button class="tab" data-agent="outreach" role="tab">
+        <span class="tab-num">03</span>
+        <span class="tab-title">Outreach Agent</span>
+        <span class="tab-desc">Profiel → persoonlijk bericht</span>
+      </button>
+    </nav>
+
+    <!-- ════ SCREENING ════ -->
+    <section class="agent-panel active" id="panel-screening">
+      <div class="panel-grid">
+        <div class="panel-inputs">
+          <label>Vacaturetekst
+            <textarea id="screening-vacancy" rows="8" placeholder="Plak hier de vacaturetekst…"></textarea>
+          </label>
+          <label>CV / kandidaatprofiel
+            <textarea id="screening-cv" rows="8" placeholder="Plak hier het CV of LinkedIn-profiel…"></textarea>
+          </label>
+          <div class="panel-actions">
+            <button class="btn-primary" data-run="screening">Analyseer match →</button>
+            <button class="btn-ghost" data-demo="screening">Demo-data laden</button>
+          </div>
+        </div>
+        <div class="panel-output" id="output-screening">
+          <div class="output-empty">De matchanalyse verschijnt hier: score, sterke punten, aandachtspunten en gerichte screeningsvragen.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ INTERVIEW ════ -->
+    <section class="agent-panel" id="panel-interview">
+      <div class="panel-grid">
+        <div class="panel-inputs">
+          <label>Type gesprek
+            <select id="interview-type">
+              <option value="intakegesprek met kandidaat">Intake met kandidaat</option>
+              <option value="sollicitatiegesprek">Sollicitatiegesprek</option>
+              <option value="intakegesprek met hiring manager over een vacature">Vacature-intake met hiring manager</option>
+            </select>
+          </label>
+          <label>Transcript of gespreksnotities
+            <textarea id="interview-transcript" rows="14" placeholder="Plak hier het transcript (bijv. uit Plaud) of je ruwe notities…"></textarea>
+          </label>
+          <div class="panel-actions">
+            <button class="btn-primary" data-run="interview">Genereer verslag →</button>
+            <button class="btn-ghost" data-demo="interview">Demo-data laden</button>
+          </div>
+        </div>
+        <div class="panel-output" id="output-interview">
+          <div class="output-empty">Het gestructureerde verslag verschijnt hier: samenvatting, kandidaatprofiel, actiepunten en een ATS-klare notitie.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════ OUTREACH ════ -->
+    <section class="agent-panel" id="panel-outreach">
+      <div class="panel-grid">
+        <div class="panel-inputs">
+          <label>Kandidaatinformatie
+            <textarea id="outreach-candidate" rows="6" placeholder="Korte schets van de kandidaat: rol, ervaring, wat opvalt…"></textarea>
+          </label>
+          <label>Vacature / context
+            <textarea id="outreach-vacancy" rows="6" placeholder="Voor welke rol benader je deze kandidaat?"></textarea>
+          </label>
+          <label>Toon
+            <select id="outreach-tone">
+              <option value="warm en informeel (je-vorm)">Warm &amp; informeel</option>
+              <option value="professioneel maar persoonlijk">Professioneel &amp; persoonlijk</option>
+              <option value="kort en direct">Kort &amp; direct</option>
+            </select>
+          </label>
+          <div class="panel-actions">
+            <button class="btn-primary" data-run="outreach">Schrijf bericht →</button>
+            <button class="btn-ghost" data-demo="outreach">Demo-data laden</button>
+          </div>
+        </div>
+        <div class="panel-output" id="output-outreach">
+          <div class="output-empty">Hier verschijnen een e-mail- en LinkedIn-variant van je outreachbericht.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="integration-note">
+      <h2>ATS-integratie</h2>
+      <p>Dit prototype draait volledig client-side. Voor productie koppel je de agents via een
+      backend of automatiseringslaag (bijv. <strong>n8n</strong>) aan je ATS: webhook in,
+      gestructureerde JSON uit, kandidaatdossier bijgewerkt. Elke agent levert output als
+      gestructureerde data — klaar om te mappen op je ATS-velden.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>RecruitAgents · intern prototype · aangedreven door de Anthropic API</p>
+  </footer>
+
+  <!-- ════ SETTINGS MODAL ════ -->
+  <dialog id="settings-modal">
+    <h2>Instellingen</h2>
+    <label>Anthropic API-key
+      <input type="password" id="setting-apikey" placeholder="sk-ant-…" autocomplete="off">
+    </label>
+    <label>Model
+      <input type="text" id="setting-model" value="claude-sonnet-4-6">
+    </label>
+    <p class="setting-warning">⚠ Je API-key wordt alleen in deze browsersessie bewaard
+    (sessionStorage) en gaat rechtstreeks naar api.anthropic.com. Gebruik dit alleen voor
+    demo-doeleinden — zet voor productie een backend-proxy (bijv. n8n) ertussen.</p>
+    <div class="panel-actions">
+      <button class="btn-primary" id="btn-save-settings">Opslaan</button>
+      <button class="btn-ghost" id="btn-close-settings">Sluiten</button>
+    </div>
+  </dialog>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
