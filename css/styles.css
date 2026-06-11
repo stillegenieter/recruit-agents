@@ -18,6 +18,7 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
 
 body {
   background: var(--bg);
@@ -39,6 +40,16 @@ body {
   position: sticky; top: 0; background: rgba(16,14,12,.85);
   backdrop-filter: blur(10px); z-index: 10;
 }
+.topbar-actions { display: flex; align-items: center; gap: .75rem; }
+.auth-user-info { display: flex; align-items: center; gap: .6rem; }
+.auth-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--accent-soft); border: 1px solid var(--accent);
+  color: var(--accent); font-family: var(--mono); font-size: .65rem; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.auth-name { font-size: .85rem; color: var(--ink-dim); }
+.btn-sm { padding: .45rem .85rem; font-size: .8rem; }
 .brand { display: flex; align-items: baseline; gap: .55rem; }
 .brand-mark { color: var(--accent); font-size: .9rem; }
 .brand-name { font-family: var(--display); font-weight: 700; font-size: 1.25rem; letter-spacing: -.01em; }
@@ -165,6 +176,97 @@ textarea:focus, select:focus, input:focus { outline: none; border-color: var(--a
 .integration-note p { color: var(--ink-dim); font-size: .93rem; max-width: 75ch; }
 footer { border-top: 1px solid var(--line); padding: 1.5rem 2rem; text-align: center; }
 footer p { font-family: var(--mono); font-size: .7rem; color: var(--ink-dim); letter-spacing: .08em; }
+
+/* ── Login scherm ── */
+.login-screen {
+  position: fixed; inset: 0; z-index: 100;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+}
+.login-card {
+  background: var(--bg-raised); border: 1px solid var(--line); border-radius: 16px;
+  padding: 2.8rem 2.4rem; max-width: 400px; width: 92vw;
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+  text-align: center;
+}
+.login-brand {
+  display: flex; align-items: baseline; gap: .55rem;
+  font-family: var(--display); font-weight: 700; font-size: 1.3rem;
+  margin-bottom: .4rem;
+}
+.login-brand .brand-mark { color: var(--accent); font-size: .9rem; }
+.login-brand em { font-style: italic; color: var(--accent); }
+.login-title {
+  font-family: var(--display); font-weight: 600; font-size: 1.6rem;
+  letter-spacing: -.02em; margin: 0;
+}
+.login-sub { color: var(--ink-dim); font-size: .92rem; max-width: 32ch; }
+.btn-ms-login {
+  display: flex; align-items: center; gap: .75rem;
+  background: #fff; color: #1a1a1a; border: 0; border-radius: 8px;
+  font-family: var(--body); font-weight: 600; font-size: .95rem;
+  padding: .8rem 1.6rem; cursor: pointer; margin-top: .5rem;
+  transition: box-shadow .2s, transform .15s;
+}
+.btn-ms-login:hover { box-shadow: 0 4px 16px rgba(0,0,0,.35); transform: translateY(-1px); }
+.ms-icon { width: 21px; height: 21px; flex-shrink: 0; }
+.login-error { font-family: var(--mono); font-size: .78rem; color: var(--warn); min-height: 1.2em; }
+
+/* ── Auth user info in topbar ── */
+.topbar-actions { display: flex; align-items: center; gap: .75rem; }
+.auth-user-info { display: flex; align-items: center; gap: .6rem; }
+.auth-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--accent-soft); border: 1px solid var(--accent);
+  color: var(--accent); font-family: var(--mono); font-size: .65rem; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.auth-name { font-size: .85rem; color: var(--ink-dim); }
+.btn-sm { padding: .45rem .85rem; font-size: .8rem; }
+
+/* ── Settings fieldsets ── */
+.settings-section {
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 1rem 1.1rem 1.1rem; margin-bottom: 1.1rem;
+}
+.settings-section legend {
+  font-family: var(--mono); font-size: .68rem; text-transform: uppercase;
+  letter-spacing: .12em; color: var(--accent); padding: 0 .4rem;
+}
+.setting-info {
+  font-size: .78rem; color: var(--ink-dim); margin: .6rem 0 .2rem; line-height: 1.55;
+}
+.setting-code {
+  display: inline-block; margin-top: .3rem;
+  font-family: var(--mono); font-size: .73rem;
+  background: var(--bg-input); border: 1px solid var(--line);
+  border-radius: 4px; padding: .2rem .5rem; word-break: break-all;
+  color: var(--ink);
+}
+
+/* ── CV Upload ── */
+.upload-zone {
+  display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+  padding: .7rem 1rem; background: var(--bg-input);
+  border: 1px dashed var(--line); border-radius: 8px;
+  transition: border-color .2s;
+}
+.upload-zone.drag-over { border-color: var(--accent); background: var(--accent-soft); }
+.btn-upload {
+  background: transparent; color: var(--ink); border: 1px solid var(--line);
+  border-radius: 8px; font-family: var(--body); font-size: .88rem;
+  padding: .5rem 1rem; cursor: pointer; transition: color .2s, border-color .2s;
+  display: flex; align-items: center; gap: .4rem; white-space: nowrap;
+}
+.btn-upload:hover { color: var(--accent); border-color: var(--accent); }
+.upload-icon { font-size: 1rem; line-height: 1; }
+.upload-hint { font-size: .75rem; color: var(--ink-dim); font-family: var(--mono); }
+.upload-status {
+  font-size: .78rem; font-family: var(--mono); color: var(--ok);
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.upload-status.error { color: var(--warn); }
+.upload-status.loading { color: var(--ink-dim); }
 
 /* ── Modal ── */
 dialog {

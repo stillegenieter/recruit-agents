@@ -19,10 +19,39 @@
       <span class="brand-name">Recruit<em>Agents</em></span>
       <span class="brand-tag">prototype</span>
     </div>
-    <button id="btn-settings" class="btn-ghost" type="button">⚙ Instellingen</button>
+    <div class="topbar-actions">
+      <div id="auth-user-info" class="auth-user-info" hidden>
+        <span class="auth-avatar" id="auth-avatar"></span>
+        <span class="auth-name" id="auth-name"></span>
+        <button id="btn-logout" class="btn-ghost btn-sm" type="button">Uitloggen</button>
+      </div>
+      <button id="btn-settings" class="btn-ghost" type="button">⚙ Instellingen</button>
+    </div>
   </header>
 
-  <main>
+  <!-- ════ LOGIN SCHERM ════ -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <div class="login-brand">
+        <span class="brand-mark">◆</span>
+        <span class="brand-name">Recruit<em>Agents</em></span>
+      </div>
+      <h1 class="login-title">Welkom terug</h1>
+      <p class="login-sub" id="login-message">Log in met je Microsoft-account om verder te gaan.</p>
+      <button id="btn-login" class="btn-ms-login" type="button">
+        <svg class="ms-icon" viewBox="0 0 21 21" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="1"  y="1"  width="9" height="9" fill="#f25022"/>
+          <rect x="11" y="1"  width="9" height="9" fill="#7fba00"/>
+          <rect x="1"  y="11" width="9" height="9" fill="#00a4ef"/>
+          <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+        </svg>
+        Inloggen met Microsoft
+      </button>
+      <p class="login-error" id="login-error"></p>
+    </div>
+  </div>
+
+  <main hidden>
     <section class="hero">
       <p class="hero-kicker">AI-agents voor je recruitmentproces</p>
       <h1>Van gesprek naar <span class="accent">ATS-klare</span> output.<br>In seconden.</h1>
@@ -57,8 +86,16 @@
             <textarea id="screening-vacancy" rows="8" placeholder="Plak hier de vacaturetekst…"></textarea>
           </label>
           <label>CV / kandidaatprofiel
-            <textarea id="screening-cv" rows="8" placeholder="Plak hier het CV of LinkedIn-profiel…"></textarea>
+            <textarea id="screening-cv" rows="8" placeholder="Plak hier het CV of LinkedIn-profiel, of upload een bestand hieronder…"></textarea>
           </label>
+          <div class="upload-zone" id="cv-upload-zone">
+            <input type="file" id="cv-file-input" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
+            <button type="button" class="btn-upload" id="cv-upload-btn">
+              <span class="upload-icon">↑</span> CV uploaden
+            </button>
+            <span class="upload-hint">PDF of Word (.doc, .docx)</span>
+            <span class="upload-status" id="cv-upload-status"></span>
+          </div>
           <div class="panel-actions">
             <button class="btn-primary" data-run="screening">Analyseer match →</button>
             <button class="btn-ghost" data-demo="screening">Demo-data laden</button>
@@ -132,28 +169,51 @@
     </section>
   </main>
 
-  <footer>
+  <footer hidden>
     <p>RecruitAgents · intern prototype · aangedreven door de Anthropic API</p>
   </footer>
 
   <!-- ════ SETTINGS MODAL ════ -->
   <dialog id="settings-modal">
     <h2>Instellingen</h2>
-    <label>Anthropic API-key
-      <input type="password" id="setting-apikey" placeholder="sk-ant-…" autocomplete="off">
-    </label>
-    <label>Model
-      <input type="text" id="setting-model" value="claude-sonnet-4-6">
-    </label>
-    <p class="setting-warning">⚠ Je API-key wordt alleen in deze browsersessie bewaard
-    (sessionStorage) en gaat rechtstreeks naar api.anthropic.com. Gebruik dit alleen voor
-    demo-doeleinden — zet voor productie een backend-proxy (bijv. n8n) ertussen.</p>
+
+    <fieldset class="settings-section">
+      <legend>Microsoft Entra (SSO)</legend>
+      <label>Application (Client) ID
+        <input type="text" id="setting-msal-clientid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" autocomplete="off">
+      </label>
+      <label>Tenant ID
+        <input type="text" id="setting-msal-tenantid" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (of 'common')" autocomplete="off">
+      </label>
+      <p class="setting-info">
+        Maak een App Registration aan in <strong>Entra ID → App registrations</strong>.<br>
+        Voeg als Redirect URI toe (type: SPA):<br>
+        <code class="setting-code" id="setting-redirect-uri"></code>
+      </p>
+    </fieldset>
+
+    <fieldset class="settings-section">
+      <legend>Anthropic API</legend>
+      <label>API-key
+        <input type="password" id="setting-apikey" placeholder="sk-ant-…" autocomplete="off">
+      </label>
+      <label>Model
+        <input type="text" id="setting-model" value="claude-sonnet-4-6">
+      </label>
+      <p class="setting-warning">⚠ Je API-key wordt alleen in deze browsersessie bewaard
+      (sessionStorage) en gaat rechtstreeks naar api.anthropic.com. Gebruik dit alleen voor
+      demo-doeleinden — zet voor productie een backend-proxy (bijv. n8n) ertussen.</p>
+    </fieldset>
+
     <div class="panel-actions">
       <button class="btn-primary" id="btn-save-settings">Opslaan</button>
       <button class="btn-ghost" id="btn-close-settings">Sluiten</button>
     </div>
   </dialog>
 
+  <script src="https://alcdn.msauth.net/browser/3.26.0/js/msal-browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
