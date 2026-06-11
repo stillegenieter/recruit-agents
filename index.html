@@ -57,8 +57,16 @@
             <textarea id="screening-vacancy" rows="8" placeholder="Plak hier de vacaturetekst…"></textarea>
           </label>
           <label>CV / kandidaatprofiel
-            <textarea id="screening-cv" rows="8" placeholder="Plak hier het CV of LinkedIn-profiel…"></textarea>
+            <textarea id="screening-cv" rows="8" placeholder="Plak hier het CV of LinkedIn-profiel, of upload een bestand hieronder…"></textarea>
           </label>
+          <div class="upload-zone" id="cv-upload-zone">
+            <input type="file" id="cv-file-input" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
+            <button type="button" class="btn-upload" id="cv-upload-btn">
+              <span class="upload-icon">↑</span> CV uploaden
+            </button>
+            <span class="upload-hint">PDF of Word (.doc, .docx)</span>
+            <span class="upload-status" id="cv-upload-status"></span>
+          </div>
           <div class="panel-actions">
             <button class="btn-primary" data-run="screening">Analyseer match →</button>
             <button class="btn-ghost" data-demo="screening">Demo-data laden</button>
@@ -154,6 +162,8 @@
     </div>
   </dialog>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs" type="module"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.8.0/mammoth.browser.min.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

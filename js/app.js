@@ -237,6 +237,91 @@ document.querySelectorAll("[data-run]").forEach((btn) => {
   });
 });
 
+/* ════ CV UPLOAD ════ */
+(function () {
+  const zone   = document.getElementById("cv-upload-zone");
+  const input  = document.getElementById("cv-file-input");
+  const btn    = document.getElementById("cv-upload-btn");
+  const status = document.getElementById("cv-upload-status");
+  const cvArea = document.getElementById("screening-cv");
+
+  const ALLOWED = ["application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+  const ALLOWED_EXT = /\.(pdf|doc|docx)$/i;
+
+  function setStatus(msg, type = "") {
+    status.textContent = msg;
+    status.className = "upload-status" + (type ? " " + type : "");
+  }
+
+  async function extractPdf(file) {
+    // pdf.js 4.x via ESM — falls back to a simple ArrayBuffer read via the global pdfjsLib if loaded
+    const arrayBuffer = await file.arrayBuffer();
+    // Try global pdfjsLib (loaded as classic script elsewhere), else dynamic import
+    let pdfjsLib = window.pdfjsLib;
+    if (!pdfjsLib) {
+      const mod = await import("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs");
+      pdfjsLib = mod;
+    }
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs";
+    const pdf   = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    const pages = [];
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page    = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      pages.push(content.items.map((it) => it.str).join(" "));
+    }
+    return pages.join("\n\n");
+  }
+
+  async function extractDocx(file) {
+    const arrayBuffer = await file.arrayBuffer();
+    const result = await mammoth.extractRawText({ arrayBuffer });
+    return result.value;
+  }
+
+  async function handleFile(file) {
+    if (!file) return;
+    const ok = ALLOWED.includes(file.type) || ALLOWED_EXT.test(file.name);
+    if (!ok) {
+      setStatus("Alleen PDF of Word (.doc/.docx) toegestaan.", "error");
+      return;
+    }
+    setStatus(`Bezig met inlezen: ${file.name}…`, "loading");
+    btn.disabled = true;
+    try {
+      let text = "";
+      if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) {
+        text = await extractPdf(file);
+      } else {
+        text = await extractDocx(file);
+      }
+      if (!text.trim()) throw new Error("Geen tekst gevonden in het bestand.");
+      cvArea.value = text.trim();
+      setStatus(`✓ ${file.name} ingelezen (${text.trim().split(/\s+/).length} woorden)`);
+    } catch (err) {
+      setStatus("Fout: " + (err.message || err), "error");
+    } finally {
+      btn.disabled = false;
+      input.value = "";
+    }
+  }
+
+  btn.addEventListener("click", () => input.click());
+  input.addEventListener("change", () => handleFile(input.files[0]));
+
+  // Drag & drop
+  zone.addEventListener("dragover", (e) => { e.preventDefault(); zone.classList.add("drag-over"); });
+  zone.addEventListener("dragleave", () => zone.classList.remove("drag-over"));
+  zone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    zone.classList.remove("drag-over");
+    handleFile(e.dataTransfer.files[0]);
+  });
+})();
+
 /* ── Demo data ── */
 const DEMO = {
   screening() {

@@ -156,6 +156,32 @@ textarea:focus, select:focus, input:focus { outline: none; border-color: var(--a
   padding: .9rem 1rem; font-size: .9rem; white-space: pre-wrap; margin-top: .4rem;
 }
 
+/* ── CV Upload ── */
+.upload-zone {
+  display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+  padding: .7rem 1rem; background: var(--bg-input);
+  border: 1px dashed var(--line); border-radius: 8px;
+  transition: border-color .2s;
+}
+.upload-zone.drag-over {
+  border-color: var(--accent); background: var(--accent-soft);
+}
+.btn-upload {
+  background: transparent; color: var(--ink); border: 1px solid var(--line);
+  border-radius: 8px; font-family: var(--body); font-size: .88rem;
+  padding: .5rem 1rem; cursor: pointer; transition: color .2s, border-color .2s;
+  display: flex; align-items: center; gap: .4rem; white-space: nowrap;
+}
+.btn-upload:hover { color: var(--accent); border-color: var(--accent); }
+.upload-icon { font-size: 1rem; line-height: 1; }
+.upload-hint { font-size: .75rem; color: var(--ink-dim); font-family: var(--mono); }
+.upload-status {
+  font-size: .78rem; font-family: var(--mono);
+  color: var(--ok); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.upload-status.error { color: var(--warn); }
+.upload-status.loading { color: var(--ink-dim); }
+
 /* ── Integration note & footer ── */
 .integration-note {
   margin-top: 3.5rem; border: 1px solid var(--line); border-left: 3px solid var(--accent);
